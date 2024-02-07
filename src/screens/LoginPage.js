@@ -30,6 +30,8 @@ function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        <a href="">Forgot Password </a>
         <CustomButton text="Login" onClick={onSignIn} type="submit" />
       </form>
     </div>

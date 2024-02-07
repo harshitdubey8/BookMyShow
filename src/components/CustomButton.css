@@ -1,11 +1,12 @@
 .CustomButton {
-    background-color: #F84464;
-    color : white;
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    height: 30px;
-    font-size: 13px;
-    font-weight: bold;
-    width: 100%;
+  background-color: #f84464;
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  height: 30px;
+  font-size: 13px;
+  font-weight: bold;
+  width: fit-content;
+  height: fit-content;
 }

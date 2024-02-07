@@ -6,11 +6,12 @@ function SignUpPage() {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
 
   const onSignIn = (e) => {
     e.preventDefault();
     console.log(username);
-    console.log(password);
+    console.log(userType);
     console.log(email);
   };
 
