@@ -28,7 +28,6 @@ function App() {
       setUser(resData.data);
     });
   };
-
   useEffect(() => {
     const userEmail = sessionStorage.getItem("userEmail");
     getUserDetails(userEmail);
