@@ -1,38 +1,17 @@
 import React, { useState } from "react";
 import "./profileUpdate.css";
 import CustomButton from "../../components/CustomButton";
+import axios from "axios";
 
-const ProfileUpdate = () => {
-  // Sample user data
-  const [user, setUser] = useState();
-
-  const [userDetails, setUserDetails] = useState();
-
-  useEffect(() => {
-    const userLoggedIn = sessionStorage.getItem("userEmail");
-    setUser(userLoggedIn);
-  }, [setUser]);
-
-  //TODO :: fix this
-  const getUserDetails = async (e) => {
-    e.preventDefault();
-    if (!user) {
-      return;
-    }
-    let url = `http://localhost:80/api/user/${user}`;
-
-    axios.get(url).then((resData) => {
-      setUserDetails(resData.data);
-    });
-    console.log(userDetails);
-  };
-
+const ProfileUpdate = ({ userData }) => {
   // State for form fields
   const [formData, setFormData] = useState({
-    userName: userDetails.userName,
-    userPhone: userDetails.userPhone,
-    profilePicture: userDetails.profilePicture,
+    username: userData.username,
+    phoneNo: userData.phoneNo,
+    profilePicUrl: userData.profilePicUrl,
   });
+
+  const [error, setError] = useState("");
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -41,26 +20,39 @@ const ProfileUpdate = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const updateUserData = (e) => {
     e.preventDefault();
+
+    let url = `http://localhost:80/api/user/${userData._id}`;
+
+    axios
+      .put(url, formData)
+      .then((resData) => {
+        alert(resData.data.message);
+      })
+      .catch((error) => {
+        console.error("Error during updating the user:", error);
+        setError(error);
+        alert("An error occurred during updating the user: " + error.message);
+      });
   };
 
   return (
     <div className="profile-container">
       <div className="profile-picture-container">
         <img
-          src={user.profilePicture}
+          src={userData.profilePicUrl}
           alt="Profile"
           className="profile-picture"
         />
       </div>
-      <form onSubmit={handleSubmit} className="profile-form">
+      <form onSubmit={updateUserData} className="profile-form">
         <div>
           <label>Username:</label>
           <input
             type="text"
-            name="userName"
-            value={formData.userName}
+            name="username"
+            value={formData.username}
             onChange={handleInputChange}
           />
         </div>
@@ -68,8 +60,8 @@ const ProfileUpdate = () => {
           <label>Profile Pic Url</label>
           <input
             type="text"
-            name="profilePicture"
-            value={formData.profilePicture}
+            name="profilePicUrl"
+            value={formData.profilePicUrl}
             onChange={handleInputChange}
           />
         </div>
@@ -77,13 +69,14 @@ const ProfileUpdate = () => {
           <label>Phone:</label>
           <input
             type="tel"
-            name="userPhone"
+            name="phoneNo"
             pattern="[0-9]{10}"
-            value={formData.userPhone}
+            value={formData.phoneNo}
             onChange={handleInputChange}
           />
         </div>
         <CustomButton type="submit" text="Save Changes" size="large" />
+        <p>{error}</p>
       </form>
     </div>
   );

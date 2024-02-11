@@ -1,63 +1,44 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./MovieDetailsScreen.css";
 import CustomButton from "../components/CustomButton";
 import RatingStars from "../components/RatingStars";
 import ReviewCard from "../components/ReviewCard";
 import TheatreCard from "../components/TheatreCard/TheatreCard";
+import CustomModal from "../components/CustomModal/CustomModal";
+import { Reviews } from "@mui/icons-material";
 
-function MovieDetailScreen() {
+function MovieDetailScreen({ userData }) {
   const [movie, setMovie] = useState({});
   const [movieReviews, setMovieReviews] = useState([]);
   const [movieTheatre, setMovieTheatre] = useState([]);
-  const [userDetails, setUserDetails] = useState();
-  const [user, setUser] = useState("");
 
-  // const history = useHistory();
+  const [reviewMessage, setReviewMessage] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
 
-  // set if user is logged in or not
-  useEffect(() => {
-    const userLoggedIn = sessionStorage.getItem("userEmail");
-    setUser(userLoggedIn);
-  }, [setUser]);
+  const [result, setResult] = useState();
+  const [bookingResult, setBookingResult] = useState();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [selectedTheatre, setSelectedTheatre] = useState({});
+  const [ticketCount, setTicketCount] = useState(1);
 
   const { id } = useParams();
+  let navigate = useNavigate();
 
-  // get movie data by id
-  useEffect(() => {
-    let url = `http://localhost:80/api/movies/${id}`;
-    axios.get(url).then((resData) => {
-      setMovie(resData.data);
-      getAllReviews();
-      getTheatreData();
-    });
-  }, []);
-
-  // Get User Details
-  const getUserDetails = async (e) => {
-    e.preventDefault();
-    if (!user) {
+  const getAllReviews = async (movieId) => {
+    if (!movieId) {
+      console.error(
+        "Movie is not properly defined or does not have a valid ID"
+      );
       return;
     }
-    let url = `http://localhost:80/api/user/${user}`;
-
-    axios.get(url).then((resData) => {
-      setUserDetails(resData.data);
-    });
-    console.log(userDetails);
-  };
-
-  // Get all Reviews
-  const getAllReviews = async () => {
-    let url = `http://localhost:80/api/reviews`;
+    let url = `http://localhost:80/api/reviews/${movieId}`;
     await axios.get(url).then((resData) => {
       setMovieReviews(resData.data);
     });
-  };
-
-  const addReview = () => {
-    console.log("Review Added");
   };
 
   const getTheatreData = async () => {
@@ -67,16 +48,71 @@ function MovieDetailScreen() {
     });
   };
 
-  // const onBookClick = (theatreId) => {
-  //   const data = {
-  //     movieId: movie._id,
-  //     theatreId: theatreId,
-  //   };
+  // get movie data by id
+  useEffect(() => {
+    let url = `http://localhost:80/api/movies/${id}`;
+    axios.get(url).then((resData) => {
+      setMovie(resData.data);
 
-  //   const queryString = new URLSearchParams(data).toString();
+      getTheatreData();
+      getAllReviews(resData.data?._id);
+    });
+  }, []);
 
-  //   history.push(`/booking?${queryString}`);
-  // };
+  // Get all Reviews
+
+  const addReview = (e) => {
+    e.preventDefault();
+
+    let reviewObj = {
+      message: reviewMessage,
+      userRating: reviewRating,
+      userId: userData._id,
+      movieId: movie._id,
+    };
+    let url = `http://localhost:80/api/reviews/add`;
+
+    axios
+      .post(url, reviewObj)
+      .then(() => {
+        setResult("Review added successfully");
+        getAllReviews();
+      })
+      .catch((error) => {
+        console.error("Error during Adding the Review:", error);
+        setBookingResult(
+          "An error occurred during adding the Review: " + error.message
+        );
+      });
+  };
+
+  const onBookClick = (theatre) => {
+    setSelectedTheatre(theatre);
+
+    // To open Modal
+    setIsOpen(true);
+  };
+
+  const OnBookingConfirm = async (e) => {
+    e.preventDefault();
+    let bookingObj = {
+      userId: userData._id,
+      movieId: movie._id,
+      theatreId: selectedTheatre._id,
+      seats: ticketCount,
+      grandTotal: parseFloat(selectedTheatre.moviePrices) * ticketCount,
+    };
+    let url = `http://localhost:80/api/bookings`;
+    await axios
+      .post(url, bookingObj)
+      .then(() => {
+        navigate("/Success", { replace: true });
+      })
+      .catch((error) => {
+        console.error("Error during Booking:", error);
+        setResult("An error occurred during booking: " + error.message);
+      });
+  };
 
   return (
     <div className="MovieDetailsPage">
@@ -133,33 +169,45 @@ function MovieDetailScreen() {
       <hr />
       <div className="reviews">
         <h3>Top Reviews</h3>
-        <ul>
-          {movieReviews.map((review, index) => (
-            <ReviewCard
-              username={review.userId.username}
-              message={review.message}
-            />
-          ))}
-        </ul>
+
+        {movieReviews.length === 0 ? (
+          <p> No Reviews </p>
+        ) : (
+          <ul>
+            {movieReviews.map((review, index) => (
+              <ReviewCard
+                username={review.userId.username}
+                message={review.message}
+              />
+            ))}
+          </ul>
+        )}
       </div>
-      {user != null ? (
+      {userData?.email != null ? (
         <div className="AddReviewCard">
           <form className="AddAReview">
             <label>Rate The Movie Between 1-5</label>
             <input
               className="InputField"
               placeholder="Your Rating"
+              value={reviewRating}
               type="number"
+              onChange={(e) => setReviewRating(e.target.value)}
             />
             <textarea
               className="InputField"
               name="reviewData"
               id=""
-              cols="30"
-              rows="10"
+              cols="20"
+              rows="5"
               placeholder="Add Your Review"
+              value={reviewMessage}
+              onChange={(e) => setReviewMessage(e.target.value)}
+              on
             ></textarea>
             <CustomButton text="Add Review" size="large" onClick={addReview} />
+
+            <p>{result}</p>
           </form>
         </div>
       ) : (
@@ -177,10 +225,38 @@ function MovieDetailScreen() {
             name={item.theatreName}
             location={item.theatreLocation}
             price={item.moviePrices}
-            // onClick={() => onBookClick(item._id)}
+            onClick={() => onBookClick(item)}
           />
         ))}
       </div>
+
+      <CustomModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div className="ModalCard">
+          <h2 className="Headings">Booking </h2>
+          <h2 className="Headings">Movie : {movie.movieTitle}</h2>
+          <p className="SubHeading">Theatre : {selectedTheatre.theatreName}</p>
+          <p className="SubHeading"> {selectedTheatre.theatreLocation}</p>
+
+          <label>Enter the number of tickets</label>
+          <input
+            className="InputField"
+            type="number"
+            max="5"
+            min="1"
+            value={ticketCount}
+            onChange={(e) => setTicketCount(e.target.value)}
+          />
+          <hr />
+          <p className="SubHeading">
+            Grand Total :
+            <span className="Headings">
+              {parseFloat(selectedTheatre.moviePrices) * ticketCount}
+            </span>
+          </p>
+          <CustomButton text="Confirm Booking" onClick={OnBookingConfirm} />
+          <p>{bookingResult}</p>
+        </div>
+      </CustomModal>
     </div>
   );
 }

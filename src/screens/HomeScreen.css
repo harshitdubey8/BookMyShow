@@ -12,6 +12,15 @@
 .Heading {
   color: white;
 }
+
+.TrendingMovies > .MovieRows > p {
+  color: white;
+}
+
+.NotFoundText {
+  margin-top: 10px;
+}
+
 .RecommendedMovies {
   display: flex;
   flex-direction: column;

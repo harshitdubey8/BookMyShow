@@ -8,7 +8,7 @@ function SignUpPage() {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phoneNo, setPhone] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [result, setResult] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,7 +19,7 @@ function SignUpPage() {
   const onSignIn = (e) => {
     e.preventDefault();
 
-    if (!username || !email || !password || !phone) {
+    if (!username || !email || !password || !phoneNo) {
       setErrorMessage("Please fill in all fields");
       return;
     }
@@ -30,7 +30,7 @@ function SignUpPage() {
       email: email,
       password: password,
       userType: "customer",
-      phone: phone,
+      phoneNo: phoneNo,
       profilePicUrl:
         "https://cdn4.vectorstock.com/i/1000x1000/08/38/avatar-icon-male-user-person-profile-symbol-vector-20910838.jpg",
     };
@@ -77,7 +77,7 @@ function SignUpPage() {
           className="InputField"
           placeholder="Phone"
           type="number"
-          value={phone}
+          value={phoneNo}
           onChange={(e) => setPhone(e.target.value)}
         />
         <input

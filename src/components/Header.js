@@ -3,7 +3,9 @@ import "./Header.css";
 import CustomButton from "./CustomButton";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-function Header() {
+import LOGO from "../assets/logo.png";
+
+function Header({ search, searchHandler }) {
   const [user, setUser] = useState("");
 
   useEffect(() => {
@@ -20,11 +22,13 @@ function Header() {
   return (
     <nav className="navbar">
       <Link to="/">
-        <img className="logo" src="logo.png" alt="BookMyShow Logo" />
+        <img className="logo" src={LOGO} alt="BookMyShow Logo" />
       </Link>
       <input
         className="Search-bar"
         type="text"
+        value={search}
+        onChange={searchHandler}
         placeholder="Search for the movie "
       />
       <button className="Search-button">

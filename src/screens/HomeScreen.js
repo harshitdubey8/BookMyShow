@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { Link } from "react-router-dom";
 
-function HomeScreen() {
+function HomeScreen({ searchString = "" }) {
   const [allMovies, setAllMovies] = useState([]);
 
   useEffect(() => {
@@ -15,15 +15,32 @@ function HomeScreen() {
     });
   }, []);
 
-  const upcomingMoviesArray = allMovies.filter(
-    (item) => item.type === "Upcoming"
+  const compareString = (string1 = "", string2 = "") =>
+    string1?.toLowerCase?.()?.includes?.(string2?.toLowerCase?.());
+
+  const filterMovies = (movieType, movie) => {
+    if (movie?.type !== movieType) {
+      return false;
+    }
+
+    if (searchString) {
+      return !!(
+        compareString(movie?.movieTitle, searchString) ||
+        compareString(movie?.movieDesc, searchString)
+      );
+    }
+    return true;
+  };
+
+  const upcomingMoviesArray = allMovies.filter((item) =>
+    filterMovies("Upcoming", item)
   );
-  const recommendedMoviesArray = allMovies.filter(
-    (item) => item.type === "Recommended"
+  const recommendedMoviesArray = allMovies.filter((item) =>
+    filterMovies("Recommended", item)
   );
 
-  const trendingMoviesArray = allMovies.filter(
-    (item) => item.type === "Trending"
+  const trendingMoviesArray = allMovies.filter((item) =>
+    filterMovies("Trending", item)
   );
 
   return (
@@ -35,17 +52,21 @@ function HomeScreen() {
       <div className="RecommendedMovies">
         <h2>Recommended Movies</h2>
         <div className="MovieRows">
-          {recommendedMoviesArray.map((data, index) => (
-            <Link to={`/movie/${data._id}`}>
-              <Card
-                key={index} // Add a unique key for each Card component
-                imageUrl={data.posterUrl}
-                title={data.movieTitle}
-                description={data.movieDesc}
-                genre={data.genre}
-              />
-            </Link>
-          ))}
+          {recommendedMoviesArray?.length ? (
+            recommendedMoviesArray.map((data, index) => (
+              <Link to={`/movie/${data._id}`}>
+                <Card
+                  key={index} // Add a unique key for each Card component
+                  imageUrl={data.posterUrl}
+                  title={data.movieTitle}
+                  description={data.movieDesc}
+                  genre={data.genre}
+                />
+              </Link>
+            ))
+          ) : (
+            <p className="NotFoundText">No Movies Found</p>
+          )}
         </div>
       </div>
 
@@ -53,17 +74,21 @@ function HomeScreen() {
       <div className="TrendingMovies">
         <h2 className="Heading">Trending Movies</h2>
         <div className="MovieRows">
-          {trendingMoviesArray.map((data, index) => (
-            <Link to={`/movie/${data._id}`}>
-              <Card
-                key={index} // Add a unique key for each Card component
-                imageUrl={data.posterUrl}
-                title={data.movieTitle}
-                description={data.movieDesc}
-                genre={data.genre}
-              />
-            </Link>
-          ))}
+          {trendingMoviesArray?.length ? (
+            trendingMoviesArray.map((data, index) => (
+              <Link to={`/movie/${data._id}`}>
+                <Card
+                  key={index} // Add a unique key for each Card component
+                  imageUrl={data.posterUrl}
+                  title={data.movieTitle}
+                  description={data.movieDesc}
+                  genre={data.genre}
+                />
+              </Link>
+            ))
+          ) : (
+            <p className="NotFoundText">No Movies Found</p>
+          )}
         </div>
       </div>
 
@@ -71,15 +96,19 @@ function HomeScreen() {
       <div className="RecommendedMovies">
         <h2>Upcoming Movies</h2>
         <div className="MovieRows">
-          {upcomingMoviesArray.map((data, index) => (
-            <Card
-              key={index} // Add a unique key for each Card component
-              imageUrl={data.posterUrl}
-              title={data.movieTitle}
-              description={data.movieDesc}
-              genre={data.genre}
-            />
-          ))}
+          {upcomingMoviesArray?.length ? (
+            upcomingMoviesArray.map((data, index) => (
+              <Card
+                key={index} // Add a unique key for each Card component
+                imageUrl={data.posterUrl}
+                title={data.movieTitle}
+                description={data.movieDesc}
+                genre={data.genre}
+              />
+            ))
+          ) : (
+            <p className="NotFoundText">No Movies Found</p>
+          )}
         </div>
       </div>
     </div>
