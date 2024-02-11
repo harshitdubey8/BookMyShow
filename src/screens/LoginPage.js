@@ -4,7 +4,7 @@ import CustomButton from "../components/CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function LoginPage() {
+function LoginPage({ getUserDetails }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [result, setResult] = useState("");
@@ -34,7 +34,7 @@ function LoginPage() {
         console.log(resData);
         if (resData.data.message === "User already exists") {
           sessionStorage.setItem("userEmail", email);
-
+          getUserDetails(email);
           navigate("/", { replace: true });
         } else {
           setResult("Invalid User Id or Password");
@@ -66,7 +66,7 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <a href="">Forgot Password </a>
+        <a href="#">Forgot Password </a>
         <CustomButton
           text="Login"
           onClick={onLogin}

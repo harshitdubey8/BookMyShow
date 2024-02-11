@@ -7,7 +7,6 @@ import RatingStars from "../components/RatingStars";
 import ReviewCard from "../components/ReviewCard";
 import TheatreCard from "../components/TheatreCard/TheatreCard";
 import CustomModal from "../components/CustomModal/CustomModal";
-import { Reviews } from "@mui/icons-material";
 
 function MovieDetailScreen({ userData }) {
   const [movie, setMovie] = useState({});
@@ -57,7 +56,7 @@ function MovieDetailScreen({ userData }) {
       getTheatreData();
       getAllReviews(resData.data?._id);
     });
-  }, []);
+  }, [id]);
 
   // Get all Reviews
 
@@ -176,6 +175,7 @@ function MovieDetailScreen({ userData }) {
           <ul>
             {movieReviews.map((review, index) => (
               <ReviewCard
+                key={review._id}
                 username={review.userId.username}
                 message={review.message}
               />
@@ -203,7 +203,6 @@ function MovieDetailScreen({ userData }) {
               placeholder="Add Your Review"
               value={reviewMessage}
               onChange={(e) => setReviewMessage(e.target.value)}
-              on
             ></textarea>
             <CustomButton text="Add Review" size="large" onClick={addReview} />
 
@@ -221,7 +220,7 @@ function MovieDetailScreen({ userData }) {
         <br />
         {movieTheatre.map((item, index) => (
           <TheatreCard
-            key={index}
+            key={item._id}
             name={item.theatreName}
             location={item.theatreLocation}
             price={item.moviePrices}
@@ -248,7 +247,7 @@ function MovieDetailScreen({ userData }) {
           />
           <hr />
           <p className="SubHeading">
-            Grand Total :
+            Grand Total :{" "}
             <span className="Headings">
               {parseFloat(selectedTheatre.moviePrices) * ticketCount}
             </span>

@@ -53,10 +53,9 @@ function HomeScreen({ searchString = "" }) {
         <h2>Recommended Movies</h2>
         <div className="MovieRows">
           {recommendedMoviesArray?.length ? (
-            recommendedMoviesArray.map((data, index) => (
-              <Link to={`/movie/${data._id}`}>
+            recommendedMoviesArray.map((data) => (
+              <Link key={data._id} to={`/movie/${data._id}`}>
                 <Card
-                  key={index} // Add a unique key for each Card component
                   imageUrl={data.posterUrl}
                   title={data.movieTitle}
                   description={data.movieDesc}
@@ -75,10 +74,9 @@ function HomeScreen({ searchString = "" }) {
         <h2 className="Heading">Trending Movies</h2>
         <div className="MovieRows">
           {trendingMoviesArray?.length ? (
-            trendingMoviesArray.map((data, index) => (
-              <Link to={`/movie/${data._id}`}>
+            trendingMoviesArray.map((data) => (
+              <Link key={data._id} to={`/movie/${data._id}`}>
                 <Card
-                  key={index} // Add a unique key for each Card component
                   imageUrl={data.posterUrl}
                   title={data.movieTitle}
                   description={data.movieDesc}
@@ -97,9 +95,9 @@ function HomeScreen({ searchString = "" }) {
         <h2>Upcoming Movies</h2>
         <div className="MovieRows">
           {upcomingMoviesArray?.length ? (
-            upcomingMoviesArray.map((data, index) => (
+            upcomingMoviesArray.map((data) => (
               <Card
-                key={index} // Add a unique key for each Card component
+                key={data._id} // Add a unique key for each Card component
                 imageUrl={data.posterUrl}
                 title={data.movieTitle}
                 description={data.movieDesc}

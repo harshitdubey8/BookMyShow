@@ -4,7 +4,7 @@ import CustomButton from "../components/CustomButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function SignUpPage() {
+function SignUpPage({ getUserDetails }) {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,6 +45,7 @@ function SignUpPage() {
           sessionStorage.setItem("userName", username);
           sessionStorage.setItem("userEmail", email);
           setResult("User Created Successfully");
+          getUserDetails(email);
           navigate("/", { replace: true });
         }
       })

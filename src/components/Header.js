@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Header.css";
 import CustomButton from "./CustomButton";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import LOGO from "../assets/logo.png";
 
-function Header({ search, searchHandler }) {
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    const userLoggedIn = sessionStorage.getItem("userEmail");
-    setUser(userLoggedIn);
-  }, [setUser]);
+function Header({ search, searchHandler, userData, setUser }) {
+  const location = useLocation();
 
   const logout = () => {
     sessionStorage.removeItem("userEmail");
     sessionStorage.removeItem("username");
-    setUser("");
+    setUser({});
   };
 
   return (
@@ -27,30 +22,33 @@ function Header({ search, searchHandler }) {
       <input
         className="Search-bar"
         type="text"
+        placeholder="Search for the movie"
+        disabled={location.pathname !== "/"}
         value={search}
         onChange={searchHandler}
-        placeholder="Search for the movie "
       />
       <button className="Search-button">
         <SearchIcon />
       </button>
 
-      {!user && (
+      {!userData?.email && (
         <Link to="/login">
           <CustomButton text="login" />
         </Link>
       )}
 
-      {!user && (
+      {!userData?.email && (
         <Link to="/SignUp">
-          <CustomButton text="SignUp" />
+          <CustomButton text="Register" />
         </Link>
       )}
-      <Link to="/Admin">
-        <CustomButton text="Admin" />
-      </Link>
-      {!!user && <CustomButton onClick={logout} text="logout" />}
-      {!!user && (
+      {userData?.userType === "Admin" && (
+        <Link to="/Admin">
+          <CustomButton text="Admin" />
+        </Link>
+      )}
+      {!!userData?.email && <CustomButton onClick={logout} text="logout" />}
+      {!!userData?.email && (
         <Link to="/Profile">
           <CustomButton text="User Profile" />
         </Link>
