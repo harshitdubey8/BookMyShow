@@ -3,14 +3,12 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import HomeScreen from "./screens/HomeScreen";
 import LoginPage from "./screens/LoginPage";
 import Header from "./components/Header";
 import SignUpPage from "./screens/SignUpPage";
 import AdminScreen from "./screens/AdminScreen";
 import MovieDetailScreen from "./screens/MovieDetailScreen";
-
 import ProfileUpdate from "./screens/User Profile/profileupdate";
 import SuccessScreen from "./components/SuccessScreen/SuccessScreen";
 

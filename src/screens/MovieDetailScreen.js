@@ -93,7 +93,7 @@ function MovieDetailScreen({ userData }) {
   };
 
   const OnBookingConfirm = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent page to reload
     let bookingObj = {
       userId: userData._id,
       movieId: movie._id,
