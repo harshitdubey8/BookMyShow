@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./profileUpdate.css";
 import CustomButton from "../../components/CustomButton";
 import axios from "axios";
+import BookingCard from "../../components/BookingCard/BookingCard";
 
 const ProfileUpdate = ({ userData }) => {
   // State for form fields
@@ -10,6 +11,15 @@ const ProfileUpdate = ({ userData }) => {
     phoneNo: userData.phoneNo,
     profilePicUrl: userData.profilePicUrl,
   });
+
+  const [bookings, setBookings] = useState([]);
+
+  const getAllBookings = async () => {
+    let url = `http://localhost:80/api/bookings/${userData?._id}`;
+    await axios.get(url).then((resData) => {
+      setBookings(resData.data);
+    });
+  };
 
   const [error, setError] = useState("");
 
@@ -78,6 +88,13 @@ const ProfileUpdate = ({ userData }) => {
         <CustomButton type="submit" text="Save Changes" size="large" />
         <p>{error}</p>
       </form>
+
+      <h2 style={{ marginTop: "20px" }}> Your Previous Bookings</h2>
+      <CustomButton onClick={getAllBookings} text="Get booking" />
+
+      {bookings.map((item) => (
+        <BookingCard bookingObj={item} />
+      ))}
     </div>
   );
 };
