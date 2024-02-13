@@ -11,6 +11,8 @@ import AdminScreen from "./screens/AdminScreen";
 import MovieDetailScreen from "./screens/MovieDetailScreen";
 import ProfileUpdate from "./screens/User Profile/profileupdate";
 import SuccessScreen from "./components/SuccessScreen/SuccessScreen";
+import AdminRegister from "./screens/AdminRegister/AdminRegister";
+import ForgotPassword from "./screens/Forgot Password/ForgotPassword";
 
 function App() {
   const [user, setUser] = useState({});
@@ -56,7 +58,12 @@ function App() {
             path="/SignUp"
             element={<SignUpPage getUserDetails={getUserDetails} />}
           />
+          <Route
+            path="/AdminReg"
+            element={<AdminRegister getUserDetails={getUserDetails} />}
+          />
           <Route path="/Admin" element={<AdminScreen />} />
+          <Route path="/Forgot" element={<ForgotPassword />} />
           <Route path="/success" element={<SuccessScreen />} />
           <Route path="/Profile" element={<ProfileUpdate userData={user} />} />
 

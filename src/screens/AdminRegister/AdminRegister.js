@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import "./SignUpPage.css";
-import CustomButton from "../components/CustomButton";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "../../components/CustomButton";
+import "./AdminRegister.css";
 
-function SignUpPage({ getUserDetails }) {
+function AdminRegister({ getUserDetails }) {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +32,7 @@ function SignUpPage({ getUserDetails }) {
       username: username,
       email: email,
       password: password,
-      userType: "customer",
+      userType: "Admin",
       phoneNo: phoneNo,
       profilePicUrl:
         "https://cdn4.vectorstock.com/i/1000x1000/08/38/avatar-icon-male-user-person-profile-symbol-vector-20910838.jpg",
@@ -63,7 +64,7 @@ function SignUpPage({ getUserDetails }) {
   return (
     <div className="SignUpScreen">
       <form className="SignUpCard">
-        <h2>Sign up to get Started</h2>
+        <h2>Admin Account Registration</h2>
         <input
           className="InputField"
           placeholder="Username"
@@ -137,4 +138,4 @@ function SignUpPage({ getUserDetails }) {
   );
 }
 
-export default SignUpPage;
+export default AdminRegister;

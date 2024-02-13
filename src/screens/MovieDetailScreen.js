@@ -214,20 +214,23 @@ function MovieDetailScreen({ userData }) {
       )}
 
       {/* Theatres list and Booking section  */}
-
-      <div id="bookings" className="TheatreContainer">
-        <h2 style={{ color: "white" }}>Theatres Available for booking</h2>
-        <br />
-        {movieTheatre.map((item, index) => (
-          <TheatreCard
-            key={item._id}
-            name={item.theatreName}
-            location={item.theatreLocation}
-            price={item.moviePrices}
-            onClick={() => onBookClick(item)}
-          />
-        ))}
-      </div>
+      {userData?.email != null ? (
+        <div id="bookings" className="TheatreContainer">
+          <h2 style={{ color: "white" }}>Theatres Available for booking</h2>
+          <br />
+          {movieTheatre.map((item, index) => (
+            <TheatreCard
+              key={item._id}
+              name={item.theatreName}
+              location={item.theatreLocation}
+              price={item.moviePrices}
+              onClick={() => onBookClick(item)}
+            />
+          ))}
+        </div>
+      ) : (
+        <h2 className="Headings">Login To Book Movies</h2>
+      )}
 
       <CustomModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="ModalCard">

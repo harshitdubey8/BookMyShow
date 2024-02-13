@@ -42,6 +42,11 @@ function Header({ search, searchHandler, userData, setUser }) {
           <CustomButton text="Register" />
         </Link>
       )}
+      {!userData?.email && (
+        <Link to="/AdminReg">
+          <CustomButton text="Admin Registration" />
+        </Link>
+      )}
       {userData?.userType === "Admin" && (
         <Link to="/Admin">
           <CustomButton text="Admin" />

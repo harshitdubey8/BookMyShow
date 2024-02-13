@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import "./LoginPage.css";
 import CustomButton from "../components/CustomButton";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage({ getUserDetails }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [result, setResult] = useState("");
+
   const [errorMessage, setErrorMessage] = useState("");
 
   let navigate = useNavigate();
@@ -66,7 +67,8 @@ function LoginPage({ getUserDetails }) {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <a href="#">Forgot Password </a>
+        <Link to={"/Forgot"}>Forgot Password</Link>
+
         <CustomButton
           text="Login"
           onClick={onLogin}
