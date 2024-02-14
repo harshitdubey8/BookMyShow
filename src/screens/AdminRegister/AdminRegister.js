@@ -18,12 +18,24 @@ function AdminRegister({ getUserDetails }) {
 
   const navigate = useNavigate();
 
-  // TODO :: user already Exists Fix
   const onSignIn = (e) => {
     e.preventDefault();
 
     if (!username || !email || !password || !phoneNo) {
       setErrorMessage("Please fill in all fields");
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Please enter a valid email address");
+      return;
+    }
+
+    // Validate password strength (e.g., minimum length)
+    if (password.length < 8) {
+      setErrorMessage("Password must be at least 8 characters long");
       return;
     }
 
@@ -57,7 +69,7 @@ function AdminRegister({ getUserDetails }) {
       .catch((error) => {
         console.error("Error during SignUp:", error);
 
-        setResult("An error occurred during login : ", error);
+        setResult(error?.response?.data?.message);
       });
   };
 

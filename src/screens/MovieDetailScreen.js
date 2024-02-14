@@ -181,9 +181,9 @@ function MovieDetailScreen({ userData }) {
           <ul>
             {movieReviews.map((review, index) => (
               <ReviewCard
-                key={review._id}
-                username={review.userId.username}
-                message={review.message}
+                key={review?._id}
+                username={review?.userId?.username || "anonymous"}
+                message={review?.message}
               />
             ))}
           </ul>

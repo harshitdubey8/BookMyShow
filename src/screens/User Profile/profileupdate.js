@@ -3,8 +3,9 @@ import "./profileUpdate.css";
 import CustomButton from "../../components/CustomButton";
 import axios from "axios";
 import BookingCard from "../../components/BookingCard/BookingCard";
+import { useNavigate } from "react-router-dom";
 
-const ProfileUpdate = ({ userData }) => {
+const ProfileUpdate = ({ userData, getUserDetails }) => {
   // State for form fields
   const [formData, setFormData] = useState({
     username: userData.username,
@@ -13,6 +14,8 @@ const ProfileUpdate = ({ userData }) => {
   });
 
   const [bookings, setBookings] = useState([]);
+
+  let navigate = useNavigate();
 
   const getAllBookings = async () => {
     let url = `http://localhost:80/api/bookings/${userData?._id}`;
@@ -43,6 +46,8 @@ const ProfileUpdate = ({ userData }) => {
       .put(url, formData)
       .then((resData) => {
         alert(resData.data.message);
+        getUserDetails(userData.email);
+        navigate("/", { replace: true });
       })
       .catch((error) => {
         console.error("Error during updating the user:", error);

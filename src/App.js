@@ -65,7 +65,12 @@ function App() {
           <Route path="/Admin" element={<AdminScreen />} />
           <Route path="/Forgot" element={<ForgotPassword />} />
           <Route path="/success" element={<SuccessScreen />} />
-          <Route path="/Profile" element={<ProfileUpdate userData={user} />} />
+          <Route
+            path="/Profile"
+            element={
+              <ProfileUpdate userData={user} getUserDetails={getUserDetails} />
+            }
+          />
 
           <Route
             path="/movie/:id"
