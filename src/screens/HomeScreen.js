@@ -5,8 +5,36 @@ import axios from "axios";
 
 import { Link } from "react-router-dom";
 
+const GENRE = [
+  {
+    label: "Select Genre",
+    value: "",
+  },
+  {
+    label: "Action",
+    value: "Action",
+  },
+  {
+    label: "Horror",
+    value: "Horror",
+  },
+  {
+    label: "Thriller",
+    value: "Thriller",
+  },
+  {
+    label: "Romantic",
+    value: "Romantic",
+  },
+  {
+    label: "Drama",
+    value: "Drama",
+  },
+];
+
 function HomeScreen({ searchString = "" }) {
   const [allMovies, setAllMovies] = useState([]);
+  const [genre, setGenre] = useState("");
 
   useEffect(() => {
     let url = "http://localhost:80/api/movies";
@@ -19,16 +47,30 @@ function HomeScreen({ searchString = "" }) {
     string1?.toLowerCase?.()?.includes?.(string2?.toLowerCase?.());
 
   const filterMovies = (movieType, movie) => {
+    let matchesGenre = true; // By default genre matches
+    // if the genre exist then compare genre
+    if (genre) {
+      matchesGenre = movie?.genre === genre;
+    }
+
+    // movie type doesn't match
     if (movie?.type !== movieType) {
       return false;
     }
-
+    // If search string is there and search matches as well as genre
     if (searchString) {
       return !!(
-        compareString(movie?.movieTitle, searchString) ||
-        compareString(movie?.movieDesc, searchString)
+        (compareString(movie?.movieTitle, searchString) ||
+          compareString(movie?.movieDesc, searchString)) &&
+        matchesGenre
       );
     }
+
+    // If genre does not match and search string is also not there
+    if (!matchesGenre) {
+      return false;
+    }
+
     return true;
   };
 
@@ -48,6 +90,18 @@ function HomeScreen({ searchString = "" }) {
       <div className="BannerContainer">
         <img src="banner.jpeg" alt="" />
       </div>
+
+      <select
+        className="GenreSelector"
+        name="genre"
+        value={genre}
+        onChange={(e) => setGenre(e.target.value)}
+      >
+        {GENRE.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))}
+      </select>
+
       {/* Recommended Section  */}
       <div className="RecommendedMovies">
         <h2>Recommended Movies</h2>

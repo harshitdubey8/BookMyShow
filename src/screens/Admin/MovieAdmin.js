@@ -211,26 +211,22 @@ function MovieAdmin() {
             <option value="Horror">Horror</option>
             <option value="Drama">Drama</option>
           </select>
-          <label>
-            Duration (Mins):
-            <input
-              className="InputField"
-              type="number"
-              name="duration"
-              value={formData.duration}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Release Date:
-            <input
-              className="InputField"
-              type="text"
-              name="releaseDate"
-              value={formData.releaseDate}
-              onChange={handleChange}
-            />
-          </label>
+          <label>Duration (Mins):</label>
+          <input
+            className="InputField"
+            type="number"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+          />
+          <label>Release Date:</label>
+          <input
+            className="InputField"
+            type="text"
+            name="releaseDate"
+            value={formData.releaseDate}
+            onChange={handleChange}
+          />
           <label>
             Poster URL:
             <input
@@ -241,16 +237,40 @@ function MovieAdmin() {
               onChange={handleChange}
             />
           </label>
-          <label>
-            Rating
-            <input
-              className="InputField"
-              type="text"
-              name="rating"
-              value={formData.rating}
-              onChange={handleChange}
-            />
-          </label>
+          <label>Rating</label>
+          <input
+            className="InputField"
+            type="text"
+            name="rating"
+            value={formData.rating}
+            onChange={handleChange}
+          />
+
+          {/* cast  */}
+          {/* <label>Enter 3 cast members</label>
+          <input
+            className="InputField"
+            type="text"
+            name="cast1"
+            value={formData.cast[0]}
+            onChange={handleChange}
+          />
+          <input
+            className="InputField"
+            type="text"
+            name="cast2"
+            value={formData.cast[1]}
+            onChange={handleChange}
+          />
+          <input
+            className="InputField"
+            type="text"
+            name="cast3"
+            value={formData.cast[2]}
+            onChange={handleChange}
+          /> */}
+
+          {/* cast  */}
           <label>Type:</label>
           <select
             className="InputField"

@@ -1,17 +1,18 @@
 import React from "react";
 import "./Header.css";
 import CustomButton from "./CustomButton";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import LOGO from "../assets/logo.png";
 
 function Header({ search, searchHandler, userData, setUser }) {
   const location = useLocation();
-
+  let navigate = useNavigate();
   const logout = () => {
     sessionStorage.removeItem("userEmail");
     sessionStorage.removeItem("username");
     setUser({});
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -27,9 +28,6 @@ function Header({ search, searchHandler, userData, setUser }) {
         value={search}
         onChange={searchHandler}
       />
-      <button className="Search-button">
-        <SearchIcon />
-      </button>
 
       {!userData?.email && (
         <Link to="/login">
@@ -55,7 +53,7 @@ function Header({ search, searchHandler, userData, setUser }) {
       {!!userData?.email && <CustomButton onClick={logout} text="logout" />}
       {!!userData?.email && (
         <Link to="/Profile">
-          <CustomButton text="User Profile" />
+          <CustomButton text="User Profile / Bookings" />
         </Link>
       )}
 

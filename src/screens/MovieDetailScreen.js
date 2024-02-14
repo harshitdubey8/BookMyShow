@@ -18,6 +18,7 @@ function MovieDetailScreen({ userData }) {
 
   const [result, setResult] = useState();
   const [bookingResult, setBookingResult] = useState();
+  const [reviewError, setReviewError] = useState();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -63,6 +64,11 @@ function MovieDetailScreen({ userData }) {
   const addReview = (e) => {
     e.preventDefault();
 
+    if (!reviewMessage) {
+      setReviewError("Please fill in all fields");
+      return;
+    }
+
     let reviewObj = {
       message: reviewMessage,
       userRating: reviewRating,
@@ -79,7 +85,7 @@ function MovieDetailScreen({ userData }) {
       })
       .catch((error) => {
         console.error("Error during Adding the Review:", error);
-        setBookingResult(
+        setReviewError(
           "An error occurred during adding the Review: " + error.message
         );
       });
@@ -149,7 +155,7 @@ function MovieDetailScreen({ userData }) {
       </div>
 
       <hr />
-      <div className="AboutMovie">
+      {/* <div className="AboutMovie">
         {movie.cast !== undefined ? (
           <div className="crew-images">
             <h2 className="Headings">Cast</h2>
@@ -162,7 +168,7 @@ function MovieDetailScreen({ userData }) {
         ) : (
           <p>No Cast Members</p>
         )}
-      </div>
+      </div> */}
 
       {/* all reviews  */}
       <hr />
@@ -205,7 +211,7 @@ function MovieDetailScreen({ userData }) {
               onChange={(e) => setReviewMessage(e.target.value)}
             ></textarea>
             <CustomButton text="Add Review" size="large" onClick={addReview} />
-
+            <p>{reviewError}</p>
             <p>{result}</p>
           </form>
         </div>

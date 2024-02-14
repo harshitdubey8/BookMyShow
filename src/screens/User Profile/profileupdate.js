@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./profileUpdate.css";
 import CustomButton from "../../components/CustomButton";
 import axios from "axios";
@@ -20,6 +20,10 @@ const ProfileUpdate = ({ userData }) => {
       setBookings(resData.data);
     });
   };
+
+  useEffect(() => {
+    getAllBookings();
+  }, []);
 
   const [error, setError] = useState("");
 
@@ -85,13 +89,12 @@ const ProfileUpdate = ({ userData }) => {
             onChange={handleInputChange}
           />
         </div>
-        <CustomButton type="submit" text="Save Changes" size="large" />
+        <CustomButton type="submit" text="Update Profile" size="large" />
         <p>{error}</p>
       </form>
 
       <h2 style={{ marginTop: "20px" }}> Your Previous Bookings</h2>
-      <CustomButton onClick={getAllBookings} text="Get booking" />
-
+      {bookings.length === 0 && <p> No Previous Bookings</p>}
       {bookings.map((item) => (
         <BookingCard bookingObj={item} />
       ))}
